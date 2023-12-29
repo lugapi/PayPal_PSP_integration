@@ -1,0 +1,85 @@
+    <style>
+        button {
+            background: #5469d4;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            border-radius: 4px;
+            border: 0;
+            padding: 12px 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            transition: all 0.2s ease;
+            box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+            width: 100%;
+        }
+    </style>
+    <div class="container mx-auto">
+        <x-slot name="header">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-500 leading-tight">
+                Stripe
+            </h2>
+        </x-slot>
+        <div class="container mx-auto flex flex-col gap-20">
+            <div class="flex justify-evenly	gap-5 p-10 flex-col sm:flex-row">
+                <div class="expressCheckout flex flex-col gap-5">
+                    <h1>Express Checkout</h1>
+                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        href="https://stripe.com/docs/payments/paypal/accept-a-payment?platform=web&ui=API">Documentation</a>
+                    <div class="m-5 flex flex-col gap-5 items-start">
+                        <div id="jsoneditor"></div>
+                        <button
+                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest bg-red-600 hover:bg-yellow-400 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300"
+                            id="getJSON">LOAD COMPONENTS</button>
+                    </div>
+                    <div id="express-checkout-element">
+                        <!-- Express Checkout Element will be inserted here -->
+                    </div>
+                    <div id="error-message">
+                        <!-- Display error message to your customers here -->
+                    </div>
+                </div>
+
+                <div class="tunnel flex flex-col gap-5">
+                    <h1>Custom payment flow</h1>
+                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        href="https://stripe.com/docs/payments/quickstart">Documentation</a>
+                    <!-- Display a payment form -->
+                    <form id="payment-form">
+                        <div id="link-authentication-element">
+                            <!--Stripe.js injects the Link Authentication Element-->
+                        </div>
+                        <div id="payment-element">
+                            <!--Stripe.js injects the Payment Element-->
+                        </div>
+                        <button id="submit">
+                            <div class="spinner hidden" id="spinner"></div>
+                            <span id="button-text">Pay now</span>
+                        </button>
+                        <div id="payment-message" class="hidden"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="flex flex-col gap-5">
+                <button id="checkPaymentStatus" class="hidden">Check Payment Status</button>
+                <div class="result hidden w-full bg-white rounded-lg p-5 overflow-auto border-2">
+                    <pre id="stripeResponse"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.7.4/jsoneditor.min.js"
+        integrity="sha512-KQaWlVsZF0iPXCR8p176hVrg/rlw+smy8dpJ+vwiuvoHyGr8PTVvaAV4ZmsAYdCvMRP8e3sB9pl1mRuaunaXrg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.7.4/jsoneditor.css"
+        integrity="sha512-XmjnlPNi5tkrcqMGEG7ZOpGhny9t8fdCk0oxZxjFaqF3cl3UKv+51GgeUoY3Rf/ZaGtBvMZ9dDhceGZ1hcOyMw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+        var pkey = "<%= pkey %>";
+    </script>
+
+    <script src="stripe.js"></script>
