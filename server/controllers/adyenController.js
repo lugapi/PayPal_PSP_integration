@@ -6,9 +6,6 @@ const {
     ADYEN_MERCHANT_ID,
 } = process.env;
 
-// const { Client, CheckoutAPI } = AdyenApiLibrary;
-
-
 const session = async (requestData) => {
     const apiUrl = 'https://checkout-test.adyen.com/v70/sessions';
     const apiKey = XAPIKEY;

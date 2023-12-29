@@ -23,19 +23,6 @@ app.use(express.json());
 app.use("/adyen/", adyenRoutes);
 app.use("/stripe/", stripeRoutes);
 
-// render checkout page with client id & unique client token
-// app.get("/", async (req, res) => {
-//   try {
-//     res.render("adyen", {
-//       adyenMerchantID: ADYEN_MERCHANT_ID,
-//       paypalMerchantID: PAYPAL_MERCHANT_ID,
-//       clientKey: CLIENT_KEY,
-//     });
-//   } catch (err) {
-//     res.status(500).send(err.message);
-//   }
-// });
-
 app.listen(PORT, () => {
   console.log(`Node server listening at http://localhost:${PORT}/`);
 });
