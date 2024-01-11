@@ -1,26 +1,76 @@
-// import fetch from "node-fetch";
+// PSP/server/controllers/adyenController.js
 import axios from 'axios';
+import {
+    v4 as uuidv4
+} from 'uuid';
+import Adyen from "@adyen/api-library";
 
 const {
     XAPIKEY,
     ADYEN_MERCHANT_ID,
 } = process.env;
 
-const session = async (requestData) => {
-    const apiUrl = 'https://checkout-test.adyen.com/v70/sessions';
-    const apiKey = XAPIKEY;
+// ///////////////////////////////////////////
+// ////////// SESSION VIA API ////////////////
+// ///////////////////////////////////////////
 
-    const headers = {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey
-    };
+// const session = async (requestData) => {
+//     const apiUrl = 'https://checkout-test.adyen.com/v70/sessions';
+//     const apiKey = XAPIKEY;
 
+//     const headers = {
+//         'Content-Type': 'application/json',
+//         'x-api-key': apiKey
+//     };
+
+//     try {
+//         const response = await axios.post(apiUrl, requestData, { headers });
+//         console.log(response.data);
+//         return response.data;
+//     } catch (error) {
+//         throw error;
+//     }
+// };
+
+// ///////////////////////////////////////////
+// ////////// SESSION VIA SDK ////////////////
+// ///////////////////////////////////////////
+
+const config = new Adyen.Config();
+config.apiKey = XAPIKEY;
+const client = new Adyen.Client({
+    config
+});
+const checkout = new Adyen.CheckoutAPI(client);
+
+const session = async (req, res) => {
+    // console.log("requestData", req)
     try {
-        const response = await axios.post(apiUrl, requestData, { headers });
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        throw error;
+        // unique ref for the transaction
+        const orderRef = uuidv4();
+
+        const response = await checkout.PaymentsApi.sessions({
+            amount: {
+                currency: req.amount.currency,
+                value: req.amount.value
+            },
+            countryCode: req.countryCode,
+            merchantAccount: req.merchantAccount,
+            reference: req.reference, // required: your Payment Reference
+            returnUrl: req.returnUrl + `?orderRef=${orderRef}`,
+            // set lineItems required for some payment methods (ie Klarna)
+            lineItems: req.lineItems,
+            additionalData: {
+                paypalRisk: req.additionalData.paypalRisk
+            }
+        });
+
+        console.log("response", response)
+
+        return response;
+    } catch (err) {
+        console.error(`Error: ${err.message}, error code: ${err.errorCode}`);
+        res.status(err.statusCode).json(err.message);
     }
 };
 

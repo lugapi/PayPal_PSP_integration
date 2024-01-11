@@ -6,9 +6,6 @@ import stripeRoutes from "./routes/stripeRoutes.js";
 import templateRoutes from './routes/templateRoutes.js';
 
 const {
-  ADYEN_MERCHANT_ID,
-  PAYPAL_MERCHANT_ID,
-  CLIENT_KEY,
   PORT,
 } = process.env;
 

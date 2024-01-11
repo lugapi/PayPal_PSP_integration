@@ -21,7 +21,11 @@ const json = {
     "recurringProcessingModel": "CardOnFile",
     "additionalData": {
         "paypalRisk": "{\"additional_data\":[{\"key\":\"sender_first_name\",\"value\":\"John\"},{\"key\":\"sender_last_name\",\"value\":\"Smith\"},{\"key\":\"receiver_account_id\",\"value\":\"AH00000000000000000000001\"}]}"
-    }
+    },
+    "lineItems": [
+        { "quantity": 1, "amountIncludingTax": 5000, "description": "Sunglasses" },
+        { "quantity": 1, "amountIncludingTax": 5000, "description": "Headphones" }
+    ]
 }
 
 const jsonS2S = {
