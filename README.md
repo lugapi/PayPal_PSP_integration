@@ -32,3 +32,14 @@ Go to /adyen or /stripe to test PayPal integrations
 ## 2. Stripe
 
 Open a Stripe account and see .env.exemple to identify the needed credentials.
+
+
+## Screenshots
+
+- Adyen
+![adyen](./screenshots/adyen.png)
+
+<br />
+
+- Stripe
+![stripe](./screenshots/stripe.png)
