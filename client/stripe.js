@@ -20,12 +20,35 @@ const stripe = Stripe(pkey);
 
 const options = {
     mode: 'payment',
-    amount: 10000,
+    amount: 20000,
     currency: 'usd',
-    // Customizable with appearance API.
-    appearance: {
-        /*...*/
-    },
+    // // Customizable with appearance API.
+    // appearance: {
+    //     /*...*/
+    // },
+    line_items: [{
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: 'T-shirt YYY',
+                },
+                unit_amount: 5000,
+            },
+            quantity: 1,
+        },
+        {
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: 'T-shirt XXX',
+                },
+                unit_amount: 15000,
+            },
+            quantity: 1,
+        }
+    ],
+    success_url: 'https://example.com/success',
+    cancel_url: 'https://example.com/cancel',
 };
 
 editor.set(options);
@@ -41,6 +64,9 @@ document.getElementById('getJSON').addEventListener('click', function () {
             defaultCollapsed: false,
             radios: true,
             spacedAccordionItems: false
+        },
+        buttonType: {
+            paypal: 'buynow'
         },
         paymentMethodOrder: ['card', 'paypal'],
     };
@@ -100,45 +126,41 @@ document.getElementById('getJSON').addEventListener('click', function () {
     });
 });
 
-    (function () {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const clientSecret = urlParams.get('payment_intent_client_secret');
+(function () {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const clientSecret = urlParams.get('payment_intent_client_secret');
 
-        if (clientSecret) {
-            const checkPaymentStatusButton = document.querySelector('#checkPaymentStatus');
-            const stripeResponseElement = document.getElementById('stripeResponse');
-            const resultElement = document.querySelector('.result');
+    if (clientSecret) {
+        const checkPaymentStatusButton = document.querySelector('#checkPaymentStatus');
+        const stripeResponseElement = document.getElementById('stripeResponse');
+        const resultElement = document.querySelector('.result');
 
-            checkPaymentStatusButton.classList.remove('hidden');
-            checkPaymentStatusButton.addEventListener('click', async () => {
-                const {
-                    paymentIntent,
-                    error
-                } = await stripe.retrievePaymentIntent(clientSecret);
+        checkPaymentStatusButton.classList.remove('hidden');
+        checkPaymentStatusButton.addEventListener('click', async () => {
+            const {
+                paymentIntent,
+                error
+            } = await stripe.retrievePaymentIntent(clientSecret);
 
-                if (error) {
-                    // Gérer l'erreur
-                    // } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-                } else if (paymentIntent) {
-                    // Traiter le paiement réussi
-                    console.log(paymentIntent);
-                    stripeResponseElement.innerHTML = prettyPrintObject(paymentIntent);
-                    resultElement.classList.remove('hidden');
-                }
-            });
-        }
-    })();
+            if (error) {
+                // Display error on the form
+                console.log(error);
+            } else if (paymentIntent) {
+                // Process the payment
+                console.log(paymentIntent);
+                stripeResponseElement.innerHTML = prettyPrintObject(paymentIntent);
+                resultElement.classList.remove('hidden');
+            }
+        });
+    }
+})();
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////TUNNEL////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// This is a public sample test API key.
-// Don’t submit any personally identifiable information in requests made with this key.
-// Sign in to see your own test API key embedded in code samples.
 
 
 // The items the customer wants to buy
