@@ -62,7 +62,10 @@ const session = async (req, res) => {
             lineItems: req.lineItems,
             additionalData: {
                 paypalRisk: req.additionalData.paypalRisk
-            }
+            },
+            storePaymentMethod: req.storePaymentMethod,
+            recurringProcessingModel: req.recurringProcessingModel,
+            shopperReference: req.shopperReference,
         });
 
         console.log("response", response)
