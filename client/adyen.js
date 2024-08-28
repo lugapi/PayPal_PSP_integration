@@ -149,7 +149,7 @@ async function startCheckout() {
 
     document.querySelector('.componentsContainers').classList.remove('hidden');
 
-    const paypalConfiguration = {
+    let paypalConfiguration = {
         configuration: {
             merchantId: paypalMerchantID,
             //Your Google Merchant ID as described in https://developers.google.com/pay/api/web/guides/test-and-deploy/deploy-production-environment#obtain-your-merchantID
@@ -172,6 +172,26 @@ async function startCheckout() {
             blockPayPalPayLaterButton: true,
         }
     };
+
+        // Add ECS configutation to paypalConfiguration
+    // doc => https://docs.adyen.com/payment-methods/paypal/web-component/express-checkout/?tab=1#step-3-add-additional-paypal-configuration
+
+
+    const ecsFlow = document.querySelector('#ecsFlow');
+
+    if (ecsFlow.checked) {
+        paypalConfiguration.issExpress = true;
+        paypalConfiguration.onShopperDetails = (shopperDetails, rawData, actions) => {
+            console.log("onShopperDetails");
+            console.log(shopperDetails);
+            console.log(rawData);
+            actions.resolve();
+
+            document.getElementById('shopperDetailsResponse').innerHTML = prettyPrintObject(shopperDetails);
+            document.getElementById('rawData').innerHTML = prettyPrintObject(rawData);
+
+        };
+    }
 
     const configuration = {
         environment: 'test', // Change to 'live' for the live environment.
@@ -209,8 +229,13 @@ async function startCheckout() {
 
     const checkout = await AdyenCheckout(configuration);
 
+
+    const showOnlyPayPal = document.querySelector('#showOnlyPayPal');
+
     dropinComponent = checkout.create('dropin').mount('#dropin-container');
-    cardComponent = checkout.create('card').mount('#card-container');
+    if (!showOnlyPayPal.checked) {
+        cardComponent = checkout.create('card').mount('#card-container');
+    }
     paypalComponent = checkout.create('paypal').mount('#paypal-container');
 }
 

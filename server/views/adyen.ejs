@@ -1,93 +1,103 @@
-    <div class="container mx-auto">
-        <div class="flex gap-5 my-5">
-            <x-slot name="header">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-500 leading-tight">
-                    Adyen
-                </h2>
-            </x-slot>
-        </div>
-        <x-options>
-            <div class="flex flex-col gap-2 m-2">
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="S2S" onchange="toggleS2S()">
-                    <label class="form-check-label" for="S2S">BOPIS - S2S</label>
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="requestBA" onchange="requestBA()">
-                    <label class="form-check-label" for="requestBA">Request Billing Agreement (RT) ?</label>
-                </div>
+<div class="container mx-auto">
+    <div class="flex gap-5 my-5">
+        <x-slot name="header">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-500 leading-tight">
+                Adyen
+            </h2>
+        </x-slot>
+    </div>
+    <x-options>
+        <div class="flex flex-col gap-2 m-2">
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="S2S" onchange="toggleS2S()">
+                <label class="form-check-label" for="S2S">BOPIS - S2S</label>
             </div>
-        </x-options>
-        <div class="container mx-auto flex flex-col gap-20">
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="requestBA" onchange="requestBA()">
+                <label class="form-check-label" for="requestBA">Request Billing Agreement (RT) ?</label>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="showOnlyPayPal">
+                <label class="form-check-label" for="showOnlyPayPal">Show Only PayPal for Component ?</label>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="ecsFlow">
+                <label class="form-check-label" for="ecsFlow">Enable ECS ?</label>
+            </div>
+    </x-options>
+    <div class="container mx-auto flex flex-col gap-20">
+        <div class="m-5 flex flex-col gap-5 items-start">
+            <div id="jsoneditor"></div>
+            <button
+                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest bg-red-600 hover:bg-yellow-400 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300"
+                id="getJSON">LOAD ADYEN COMPONENTS</button>
+        </div>
+        <div class="componentsContainers inte flex flex-col sm:flex-row gap-10 justify-between hidden">
+            <div class="">
+                <div class="py-5 text-center">
+                    <h2>Adyen Drop-In</h2>
+                </div>
+                <div id="dropin-container"></div>
+            </div>
+            <div class="">
+                <div class="py-5 text-center">
+                    <h2>Adyen Component</h2>
+                </div>
+                <div id="card-container"></div>
+                <br>
+                <div id="paypal-container"></div>
+            </div>
+        </div>
+        <div class="responses w-full bg-white rounded-lg p-5 overflow-auto border-2 hidden">
+            <h2>Session</h2>
+            <pre id="sessionData"></pre>
+            <br><br>
+            <h2>Response</h2>
+            <pre id="responseContent"></pre>
+            <h2>Shopper details</h2>
+            <pre id="shopperDetailsResponse"></pre>
+            <pre id="rawData"></pre>
+        </div>
+        <div class="baResults hidden">
             <div class="m-5 flex flex-col gap-5 items-start">
-                <div id="jsoneditor"></div>
                 <button
                     class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest bg-red-600 hover:bg-yellow-400 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300"
-                    id="getJSON">LOAD ADYEN COMPONENTS</button>
+                    id="getBA">GET PayPal Billing Agreement</button>
             </div>
-            <div class="componentsContainers inte flex flex-col sm:flex-row gap-10 justify-between hidden">
-                <div class="">
-                    <div class="py-5 text-center">
-                        <h2>Adyen Drop-In</h2>
-                    </div>
-                    <div id="dropin-container"></div>
-                </div>
-                <div class="">
-                    <div class="py-5 text-center">
-                        <h2>Adyen Component</h2>
-                    </div>
-                    <div id="card-container"></div>
-                    <br>
-                    <div id="paypal-container"></div>
-                </div>
+            <div class="recurringInfoDiv w-full bg-white rounded-lg p-5 overflow-auto border-2 hidden">
+                <h2>Recurring information</h2>
+                <pre id="recurringInfo"></pre>
             </div>
-            <div class="responses w-full bg-white rounded-lg p-5 overflow-auto border-2 hidden">
-                <h2>Session</h2>
-                <pre id="sessionData"></pre>
-                <br><br>
-                <h2>Response</h2>
-                <pre id="responseContent"></pre>
+        </div>
+        <div class="trxOnBAResults hidden">
+            <div class="m-5 flex flex-col gap-5 items-start">
+                <button
+                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest bg-red-600 hover:bg-yellow-400 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300"
+                    id="trxOnBA">Create MIT transaction</button>
             </div>
-            <div class="baResults hidden">
-                <div class="m-5 flex flex-col gap-5 items-start">
-                    <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest bg-red-600 hover:bg-yellow-400 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300"
-                        id="getBA">GET PayPal Billing Agreement</button>
-                </div>
-                <div class="recurringInfoDiv w-full bg-white rounded-lg p-5 overflow-auto border-2 hidden">
-                    <h2>Recurring information</h2>
-                    <pre id="recurringInfo"></pre>
-                </div>
-            </div>
-            <div class="trxOnBAResults hidden">
-                <div class="m-5 flex flex-col gap-5 items-start">
-                    <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest bg-red-600 hover:bg-yellow-400 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring focus:ring-indigo-300"
-                        id="trxOnBA">Create MIT transaction</button>
-                </div>
-                <div class="recurringTransactionDiv w-full bg-white rounded-lg p-5 overflow-auto border-2 hidden">
-                    <h2>Recurring transaction response</h2>
-                    <pre id="recurringTransactionResult"></pre>
-                </div>
+            <div class="recurringTransactionDiv w-full bg-white rounded-lg p-5 overflow-auto border-2 hidden">
+                <h2>Recurring transaction response</h2>
+                <pre id="recurringTransactionResult"></pre>
             </div>
         </div>
     </div>
-    <script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/5.41.0/adyen.js"
-        integrity="sha384-i+7Em2dyjN9Hkb0A6J/i7ijqRtlgbq2vqHFDShR7r1eDyIQOTtVTjIw/n7ewuAoT" crossorigin="anonymous">
+</div>
+<script src="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/5.41.0/adyen.js"
+    integrity="sha384-i+7Em2dyjN9Hkb0A6J/i7ijqRtlgbq2vqHFDShR7r1eDyIQOTtVTjIw/n7ewuAoT" crossorigin="anonymous">
     </script>
 
-    <link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/5.41.0/adyen.css"
-        integrity="sha384-BRZCzbS8n6hZVj8BESE6thGk0zSkUZfUWxL/vhocKu12k3NZ7xpNsIK39O2aWuni" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.7.4/jsoneditor.min.js"
-        integrity="sha512-KQaWlVsZF0iPXCR8p176hVrg/rlw+smy8dpJ+vwiuvoHyGr8PTVvaAV4ZmsAYdCvMRP8e3sB9pl1mRuaunaXrg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.7.4/jsoneditor.css"
-        integrity="sha512-XmjnlPNi5tkrcqMGEG7ZOpGhny9t8fdCk0oxZxjFaqF3cl3UKv+51GgeUoY3Rf/ZaGtBvMZ9dDhceGZ1hcOyMw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script>
-        var adyenMerchantID = "<%= adyenMerchantID %>";
-        var paypalMerchantID = "<%= paypalMerchantID %>";
-        var clientKey = "<%= clientKey %>";
-    </script>
+<link rel="stylesheet" href="https://checkoutshopper-test.adyen.com/checkoutshopper/sdk/5.41.0/adyen.css"
+    integrity="sha384-BRZCzbS8n6hZVj8BESE6thGk0zSkUZfUWxL/vhocKu12k3NZ7xpNsIK39O2aWuni" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.7.4/jsoneditor.min.js"
+    integrity="sha512-KQaWlVsZF0iPXCR8p176hVrg/rlw+smy8dpJ+vwiuvoHyGr8PTVvaAV4ZmsAYdCvMRP8e3sB9pl1mRuaunaXrg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.7.4/jsoneditor.css"
+    integrity="sha512-XmjnlPNi5tkrcqMGEG7ZOpGhny9t8fdCk0oxZxjFaqF3cl3UKv+51GgeUoY3Rf/ZaGtBvMZ9dDhceGZ1hcOyMw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script>
+    var adyenMerchantID = "<%= adyenMerchantID %>";
+    var paypalMerchantID = "<%= paypalMerchantID %>";
+    var clientKey = "<%= clientKey %>";
+</script>
 
-    <script src="adyen.js"></script>
+<script src="adyen.js"></script>
