@@ -150,26 +150,22 @@ async function startCheckout() {
     document.querySelector('.componentsContainers').classList.remove('hidden');
 
     let paypalConfiguration = {
-        configuration: {
-            merchantId: paypalMerchantID,
-            //Your Google Merchant ID as described in https://developers.google.com/pay/api/web/guides/test-and-deploy/deploy-production-environment#obtain-your-merchantID
-            intent: "capture",
-            style: { // Optional configuration for PayPal payment buttons.
-                layout: "vertical",
-                color: "blue"
-            },
-            cspNonce: "MY_CSP_NONCE",
-            onShippingChange: function (data, actions) {
-                // Listen to shipping changes.
-            },
-            onInit: (data, actions) => {
-                // onInit is called when the button first renders.
-            },
-            onClick: () => {
-                // onClick is called when the button is clicked.
-            },
-            blockPayPalCreditButton: true,
-            blockPayPalPayLaterButton: true,
+        merchantId: paypalMerchantID,
+        //Your Google Merchant ID as described in https://developers.google.com/pay/api/web/guides/test-and-deploy/deploy-production-environment#obtain-your-merchantID
+        intent: "capture",
+        style: { // Optional configuration for PayPal payment buttons.
+            layout: "vertical",
+            color: "blue"
+        },
+        cspNonce: "MY_CSP_NONCE",
+        onShippingChange: function (data, actions) {
+            // Listen to shipping changes.
+        },
+        onInit: (data, actions) => {
+            // onInit is called when the button first renders.
+        },
+        onClick: () => {
+            // onClick is called when the button is clicked.
         }
     };
 
