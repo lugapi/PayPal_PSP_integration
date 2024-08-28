@@ -173,7 +173,7 @@ async function startCheckout() {
         }
     };
 
-        // Add ECS configutation to paypalConfiguration
+    // Add ECS configutation to paypalConfiguration
     // doc => https://docs.adyen.com/payment-methods/paypal/web-component/express-checkout/?tab=1#step-3-add-additional-paypal-configuration
 
 
@@ -192,6 +192,14 @@ async function startCheckout() {
 
         };
     }
+
+    // Add BNPL configutation to paypalConfiguration
+    const payPalBNPL = document.querySelector('#payPalBNPL');
+    if (payPalBNPL && !payPalBNPL.checked) {
+        paypalConfiguration.blockPayPalCreditButton = true,
+            paypalConfiguration.blockPayPalPayLaterButton = true
+    }
+
 
     const configuration = {
         environment: 'test', // Change to 'live' for the live environment.
