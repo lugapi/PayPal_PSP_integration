@@ -44,33 +44,8 @@ const client = new Adyen.Client({
 const checkout = new Adyen.CheckoutAPI(client);
 
 const session = async (req, res) => {
-    // console.log("requestData", req)
     try {
-        // unique ref for the transaction
-        const orderRef = uuidv4();
-
-        const response = await checkout.PaymentsApi.sessions({
-            amount: {
-                currency: req.amount.currency,
-                value: req.amount.value
-            },
-            countryCode: req.countryCode,
-            merchantAccount: req.merchantAccount,
-            reference: req.reference, // required: your Payment Reference
-            returnUrl: req.returnUrl + `?orderRef=${orderRef}`,
-            // set lineItems required for some payment methods (ie Klarna)
-            lineItems: req.lineItems,
-            additionalData: {
-                paypalRisk: req.additionalData.paypalRisk
-            },
-            storePaymentMethod: req.storePaymentMethod,
-            recurringProcessingModel: req.recurringProcessingModel,
-            shopperReference: req.shopperReference,
-        });
-
-        console.log("response", response)
-
-        return response;
+        return await checkout.PaymentsApi.sessions(req);
     } catch (err) {
         console.error(`Error: ${err.message}, error code: ${err.errorCode}`);
         res.status(err.statusCode).json(err.message);
